@@ -33,3 +33,23 @@ In this final project, you will implement the missing parts in the schematic. To
 2. Make a build directory in the top level project directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./3D_object_tracking`.
+
+## Match 3D Objects
+matchBoundingBoxes function takes the previous and current data frames and provides the ids of matched ROIs according to highest number of keypoint correspondances.
+
+## Compute Lidar-based TTC
+computeTTCLidar function uses matched lidar points from bounding boxes to calculate ttc after removing outliers by taking the mean of the first 50 (configurable) closest points.
+
+## Assosciate Keypoint Correspondances with Bounding Boxes
+clusterKptMatchesWithROI function shrink the bounding box from YOLO first then compute mean & std of matched keypoints distances. Using the first confidence interval, the matches are added to boundingBox structure.
+
+## Compute Camera-based TTC
+computeTTCCamera function computes ttc using keypoint correspondances. It filters keypoints which have distance ratio less than 100 (configurable). The median of the sorted distance ratio is taken to deal with outliers.
+
+## Evaluation 1
+In some frames the ttc from lidar is very deviated from camera's and also looks unplausible. This is mainly because of outliers the way they are eliminated, would be better to use madian instead.
+
+## Evaluation 2
+Running several combination of detector/describtor shown that these combinations as the best choice for our purpose of detecting keypoints on vehicles are: SHITOMASI/BRISK
+SHITOMASI/BRIEF
+SHITOMASI/ORB 
